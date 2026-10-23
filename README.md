@@ -28,6 +28,10 @@ In `BepInEx/config/bug.dsp.generatorfuelrate.cfg`, or in your mod manager's conf
 - **Works with or without GenesisBook.**
 - **Display only.** The mod adds one text line to the power generator window and changes nothing else.
 
+## Source
+
+Source code and build instructions: [github.com/darkenb/GeneratorFuelRate](https://github.com/darkenb/GeneratorFuelRate)
+
 ## Building from source
 
 You need a current .NET SDK and the .NET Framework 4.7.2 targeting pack. The game, Unity and BepInEx assemblies are referenced from your own installation and are not part of this repository.

@@ -1,7 +1,7 @@
 {
     "name": "GeneratorFuelRate",
-    "version_number": "1.0.0",
-    "website_url": "",
+    "version_number": "1.0.1",
+    "website_url": "https://github.com/darkenb/GeneratorFuelRate",
     "description": "Shows fuel items per minute, current and at full load, in the info window of every fuel-burning power plant. GenesisBook aware. English/Chinese/Turkish.",
     "dependencies": [
         "xiaoye97-BepInEx-5.4.17"
