@@ -8,12 +8,13 @@ namespace GeneratorFuelRate
 {
     public enum Language { English, Chinese, Turkish }
 
-    [BepInPlugin("bug.dsp.generatorfuelrate", "GeneratorFuelRate", "1.0.1")]
+    [BepInPlugin("bug.dsp.generatorfuelrate", "GeneratorFuelRate", "1.0.2")]
     public class Plugin : BaseUnityPlugin
     {
-        private static Text rateText;
+        private static Text rateText, curText;
         private static ConfigEntry<bool> showCurrent, showMax;
         private static ConfigEntry<Language> language;
+        private const float CurWidth = 48f;  // room for the current number, e.g. 1620.55
         private static readonly string[] perMin = { "/ min", "/ 分钟", "/ dk" }, maxWord = { "max", "最大", "maks" };
 
         private void Awake()
@@ -52,16 +53,24 @@ namespace GeneratorFuelRate
                 rt.pivot = new Vector2(0f, 0.5f);
                 rt.sizeDelta = new Vector2(180f, 20f);
                 rt.anchoredPosition = new Vector2(-40f, -70f);
+                // The changing number gets its own right-aligned text ending where the fixed words start, so they stand still.
+                curText = Instantiate(rateText, rateText.transform.parent);
+                curText.name = "fuel-rate-current";
+                curText.alignment = TextAnchor.MiddleRight;
+                curText.rectTransform.pivot = new Vector2(1f, 0.5f);
+                curText.rectTransform.anchoredPosition = new Vector2(CurWidth - 40f, -70f);
+                rt.anchoredPosition = new Vector2(CurWidth - 36f, -70f);
             }
             ref var g = ref __instance.powerSystem.genPool[__instance.generatorId];
             var fuel = LDB.items.Select(g.curFuelId != 0 ? g.curFuelId : g.fuelId);
-            if (fuel == null) { rateText.text = ""; return; }
+            if (fuel == null) { rateText.text = curText.text = ""; return; }
             string cur = FuelPerMinute(g, g.generateCurrentTick, fuel.HeatValue).ToString("0.##");
             // capacityCurrentTick already holds proliferator, boost, antimatter and GenesisBook reactor bonuses.
             string max = FuelPerMinute(g, g.capacityCurrentTick, fuel.HeatValue).ToString("0.##");
             int l = (int)language.Value;
-            rateText.text = showCurrent.Value && showMax.Value ? cur + " " + perMin[l] + "  (" + maxWord[l] + " " + max + ")"
-                : showCurrent.Value ? cur + " " + perMin[l]
+            curText.text = showCurrent.Value ? cur : "";
+            rateText.text = showCurrent.Value && showMax.Value ? perMin[l] + "  (" + maxWord[l] + " " + max + ")"
+                : showCurrent.Value ? perMin[l]
                 : showMax.Value ? maxWord[l] + " " + max + " " + perMin[l] : "";
         }
     }

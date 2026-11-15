@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.2
+
+- The changing current number no longer pushes the "/ min (max ...)" words around: it has its own right-aligned spot.
+
 ## 1.0.1
 
 - Added a link to the GitHub source repository.
